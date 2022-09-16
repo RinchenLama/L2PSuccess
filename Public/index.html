@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/vue@next"></script>
+        <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <base hrf="/">
+        <link rel="stylesheet" href="primary.css">
+        <title>
+            L2P Driving School
+        </title>
+    </head>
+    <body>
+        <div class ="intro">
+            <div class ="intro-text">
+                <h3 class="intro-title">L2P Driving School</h3>
+                <br>
+                <h1 class="main-title">PREPARING YOU FOR THE ROAD</h1>
+                <hr>
+                <h3 class="sub-title">Become a confident and safe driver!</h3>
+            </div>
+        </div>
+        <div class ="mainbody">
+            <span class = "about-title">ABOUT US</span>
+            <hr>
+            <div class="About-us">
+                <div class="grid-container">
+                    <div class="grid-item"><span class = "grid-header">Qualified Instructors </span><br> <br>We provide knowledge-packed and practical lessons focusing on safety and on providing the experience you need to be a great driver</div>
+                    <div class="grid-item"><span class = "grid-header">Requirement </span><br> <br>An Australian Learners driving license is a must</div>
+                    <div class="grid-item"><span class = "grid-header">Class Info </span><br> <br>We are a friendly, experienced and professional driving school who will provide you with great driving lessons</div>  
+                    <div class="grid-item"><span class = "grid-header">Lessons</span><br><br>Regardless if you're a brand new learner or already have experience, we will prepare you further!</div>
+                </div>
+            </div>
+            <span class = "about-title">CONTACT US</span>
+            <hr>
+            <br>
+            <div class="contact">
+                <h3 style="font-weight: 550;">Get in Touch!</h3>
+                <br>
+                <div id="app">
+                    <div class="nes-container with-title is-centered">
+                        <p class="title">Contact Form</p>
+                        <form @submit.prevent="submit">
+                             <div class="nes-field">
+                                <label for="name_field">Your Name</label>
+                                <input placeholder="Enter Your Name" type="text" 
+                                     name="name" 
+                                     id="name_field" class="nes-input" />
+                            </div>
+                            <div class="nes-field">
+                                <label for="phone_field">Your Phone</label>
+                                <input placeholder="Enter Your Phone" type="tel" 
+                                     name="phone" 
+                                     id="phone_field" class="nes-input" />
+                            </div>
+                            <div class="nes-field job">
+                                <label for="email_field">Your Email</label>
+                                <input placeholder="Enter Your Email" type="email" 
+                                     name="email" 
+                                     id="email_field" class="nes-input" />
+                            </div>
+                            <div class="nes-field job">
+                                <label for="name_field">Message</label>
+                                <textarea placeholder="Enter message here" type="text" 
+                                     name="message" 
+                                     rows="4"
+                                     id="message_field" class="nes-input" ></textarea>
+                            </div>
+            
+                            <button
+                             type="submit" id="button" class=" job nes-btn is-primary">
+                             Send
+                            </button>
+                    </div>
+            
+                    </form>
+                    <dialog class="nes-dialog" id="dialog-default" ref="dialog">
+                        <form method="dialog">
+                            <section class="character c1">
+                                <i class="nes-bcrikko nes-c"></i>
+                                <div class="nes-balloon from-left">
+                                    <p>Message Sent! Thanks!</p>
+                                </div>
+            
+                            </section>
+                            <section class="character info">
+                                <h4 class="topic">Name: {{name}}<span id="name"></span></h4>
+                                <h5>Email: {{email}}<span id="phone">Phone: {{phone}}</span></h5>
+                                <h5>Message: {{message}}<span id="job"></span></h5>
+            
+            
+                            </section>
+                            <menu class="dialog-menu">
+                                <button class="nes-btn is-primary">Confirm</button>
+                            </menu>
+            
+                        </form>
+                    </dialog>
+                </div>
+                <script>
+            
+                    const App = {
+                        data() {
+                            return {
+                                email:'',
+                                name: '',
+                                message: '',
+                                phone: ''
+            
+                              };
+                        },
+                        methods: {
+                            async submit(event){
+                                const { email, name, message,phone } = Object.fromEntries(new FormData(event.target));
+                                this.name = name;
+                                this.email = email;
+                                this.message = message;
+                                this.phone = phone;
+            
+                                this.$refs.dialog.showModal();
+                                console.log(this.$refs.dialog)
+                                const js = await fetch("http://localhost:3000/email", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({name: this.name, email: this.email, phone: this.phone, message:this.message})
+                                });
+                                const text = js.text();
+                                console.log('got back', text)
+                            }
+                        }
+                    };
+            
+                    const app = Vue.createApp(App);
+                    app.mount("#app");
+            
+                  
+                </script>
+            
+            <style>
+            
+                .job {
+                    margin-top:40px;
+                }
+            
+                .c1 {
+                    display:flex;
+                    margin-bottom:20px;
+                }
+            
+                .nes-balloon {
+                    margin-left:22px;
+                }
+
+                #app {
+                    max-width: 70%;
+                    margin: auto;
+                }
+            </style>
+            <div class="test">
+            <br>
+                <a href="mailto:frankietran@hotmail.com"><i class="fa fa-solid fa-envelope fa-2x" style="color:black;" ></i></a>
+                <a href="tel:+61421921826"><i class="fa fa-solid fa-phone fa-2x" style="color:black;"></i></a>
+                <br>
+            </div>
+        </div>
+    </div>
+    </body>
+    <div class="footer">
+        Copyright 2022 L2P Driving School - All Rights Reserved.
+    </div>
+</html>
